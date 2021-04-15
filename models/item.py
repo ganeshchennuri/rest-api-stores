@@ -1,0 +1,2 @@
+class ItemModel:
+    pass
