@@ -1,8 +1,10 @@
-class UserModel:
+from db import db
+
+class UserModel(db.Model):  #Extending db.Model creates mapping between Database and class objects, we can insert, update delete using objects
     __tablename__ = "users"
-    id = db.column(db.Integer, primary_key=True)
-    name = db.column(db.String(50),nullable=False)
-    password = db.column(db.string(200))
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50))
+    password = db.Column(db.String(200))
 
     def __init__(self, username, password):
         self.username = username

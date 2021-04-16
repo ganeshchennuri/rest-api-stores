@@ -23,7 +23,7 @@ class Item(Resource):
         except:
             return {"message": "Error while fetching item details"}, 500
 
-    def post(self):
+    def post(self,name):
         if ItemModel.find_by_name(name):
             return {"message": "An item with {} name already exists".format(name)}
 
@@ -35,7 +35,7 @@ class Item(Resource):
             return {"message": "Error while inserting item"}, 500
         return item.json(),201
 
-    def put(self):
+    def put(self,name):
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
 
@@ -47,7 +47,7 @@ class Item(Resource):
         item.save_to_db()
         return item.json()
 
-    def delete(self):
+    def delete(self,name):
         item = ItemModel.find_by_name(name)
         if item is None:
             return {"message": "Item not found"},404
@@ -56,5 +56,5 @@ class Item(Resource):
 
 
 class Itemlist(Resource):
-    def get():
-        return {"items": [item.json() for item in ItemModel.query.all()]}
+    def get(self):
+        return {"items": [item.json() for item in ItemModel.find_all()]}

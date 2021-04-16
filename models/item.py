@@ -1,6 +1,6 @@
 from db import db
 
-class ItemModel:
+class ItemModel(db.Model): #Extending db.Model creates mapping between Database and class objects, we can insert, update delete using objects
     __tablename__ = "items" #Table for this model
     id = db.Column(db.Integer, primary_key=True)    #defining columns of table
     name = db.Column(db.String(50))
@@ -15,7 +15,12 @@ class ItemModel:
         self.store_id =store_id
 
     def json(self):
-        return {"name": self.name, "price": self.price} #custoom method to return json form of object
+        return {
+            "id":self.id,
+            "name": self.name,
+            "price": self.price,
+            "store_id": self.store_id
+            } #custoom method to return json form of object
 
     @classmethod
     def find_by_name(cls, name):
@@ -28,3 +33,7 @@ class ItemModel:
     def delete_from_db(self):
         db.session.delete(self) #Deleting from table using object
         db.session.commit()     #commiting deleted changes
+    
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
