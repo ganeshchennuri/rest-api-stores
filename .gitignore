@@ -1,7 +1,7 @@
 __pycache__/
 instance/
 .webassets-cache
-.venv
-venv/
-venv.bak/
-.db
+.env
+env/
+env.bak/
+/db/*.sqlite3
