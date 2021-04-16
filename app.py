@@ -3,7 +3,7 @@ from flask_restful import Api
 
 from resources.store import StoreList,Store
 from resources.item import Item,Itemlist
-from resources.user import UserRegister
+from resources.user import UserRegister,User
 
 app = Flask(__name__)   #Initializing Flask Web App
 
@@ -25,6 +25,7 @@ api.add_resource(Item, "/item/<string:name>")   #endpoint for item CRUD operatio
 api.add_resource(UserRegister, "/register")     #endpoint for Registering the user
 api.add_resource(Store,"/store/<string:name>")  #endpoint for addin new stores to the databse
 api.add_resource(StoreList,"/stores")           #Querying all the stores details
+api.add_resource(User, "/user/<int:user_id>")   #Querying user and deleting user
 
 if __name__ == "__main__":
     from db import db   #Importing here to avoid circular import conflict Since Models also import the db

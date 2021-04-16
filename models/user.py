@@ -10,6 +10,12 @@ class UserModel(db.Model):  #Extending db.Model creates mapping between Database
         self.username = username
         self.password = password
     
+    def json(self): #json method to return object in json format
+        return {
+            "id": self.id,
+            "username": self.username
+        }
+    
     @classmethod
     def find_by_username(cls,username):
         return cls.query.filter_by(username=username).first()
@@ -20,4 +26,8 @@ class UserModel(db.Model):  #Extending db.Model creates mapping between Database
     
     def save_to_db(self):
         db.session.add(self)    #Adding users to Database
+        db.session.commit()
+    
+    def delete_from_db(self):
+        db.session.delete(self)   #Removing users from db
         db.session.commit()
