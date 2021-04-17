@@ -1,6 +1,6 @@
 from flask_restful import Resource,reqparse
 from models.item import ItemModel
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 
 class Item(Resource):
     parser = reqparse.RequestParser() #Parsing the body using reqparse
@@ -49,7 +49,13 @@ class Item(Resource):
         item.save_to_db()
         return item.json()
 
+    @jwt_required()
     def delete(self,name):
+        claims = get_jwt()  #jwt claims details
+        if not claims["is_admin"]:
+            #if user claims to be admin then only, he can performs delete operation
+            return{"message": "Admin privileges required for this operation"},401
+
         item = ItemModel.find_by_name(name)
         if item is None:
             return {"message": "Item not found"},404
@@ -58,5 +64,13 @@ class Item(Resource):
 
 
 class Itemlist(Resource):
+    @jwt_required(optional=True)    #seting jwt Token optional
     def get(self):
-        return {"items": [item.json() for item in ItemModel.find_all()]}
+        userid = get_jwt_identity() #function gives currrently logged in user's details if any
+        items = ItemModel.find_all()
+        if userid:
+            return {"items": [item.json() for item in items]}   #if user is logged in complete item details are sent else only item names
+        return {
+            "items": [item.name for item in items],
+            "message": "Please login to see more details"
+            }

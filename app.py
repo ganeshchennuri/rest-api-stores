@@ -2,13 +2,13 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
-from resources.store import StoreList,Store
-from resources.item import Item,Itemlist
-from resources.user import UserRegister,User, UserLogin
+from resources.store import StoreList, Store
+from resources.item import Item, Itemlist
+from resources.user import UserRegister, User, UserLogin
 
 app = Flask(__name__)   #Initializing Flask Web App
 
-app.secret_key = 'dejfofioefokeefnkfhjnfefoelnkwkl'
+app.secret_key = 'dejfofioefokeefnkfhjnfefoelnkwkl' #Secret key to encrypt flask app (servcer side encryption)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'   #configuring sqlite3 with SQLAlchemy
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False    #SQLAlchemy already have modification tracker,turning off FlaskSQLAlchemy event tracker to save resources
@@ -21,7 +21,13 @@ def create_tables():
     db.create_all()         #All the necessary tables if not present are created
 
 jwt = JWTManager(app)
-#app.config["JWT_SECRET_KEY"] = "qwertyuipxvvxvswkjoubnemxxnekijebxnxjbshllazxb"  #Secret ke
+#app.config["JWT_SECRET_KEY"] = "qwertyuipxvvxvswkjoubnemxxnekijebxnxjbshllazxb"  #Secret key to jwt tokens
+
+@jwt.additional_claims_loader   # adding claims to jwt for checking user type
+def add_claims_to_jwt(identity):
+    if identity == 1:   #hardcoing the admin check, we can import froma config or db
+        return {"is_admin": True}
+    return {"is_admin": False}
 
 api.add_resource(Itemlist, "/items")            #creating endpoint for querying all the items
 api.add_resource(Item, "/item/<string:name>")   #endpoint for item CRUD operations
