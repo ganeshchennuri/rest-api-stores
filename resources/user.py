@@ -7,8 +7,10 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt,
     get_jwt_identity,
+    get_jti
 )
 
+from blacklist import BLACKLIST
 
 user_parser = reqparse.RequestParser()
 user_parser.add_argument("username",
@@ -32,6 +34,7 @@ class UserRegister(Resource):
         user.save_to_db()
         return {"message": "User Created Successfully"}, 201
 
+
 class User(Resource):
     @classmethod    #Since we dont need object of this class we can make classmethod
     def get(cls,user_id):
@@ -53,6 +56,7 @@ class User(Resource):
             return {"message": "User deleted Successfully"}, 200
         return {"message": "User Not Found"},404
 
+
 class UserLogin(Resource):
     def post(self):
         data = user_parser.parse_args()
@@ -66,6 +70,15 @@ class UserLogin(Resource):
                 "refresh_token": refresh_token
                 }, 200
         return {"message": "Invalid user credentials"}, 401
+
+
+class UserLogout(Resource):
+    @jwt_required()
+    def post(self):
+        jti = get_jwt()['jti']  #jti is jwt identity which is unique to each JWT token
+        BLACKLIST.add(jti)       #adding jti to blacklist set
+        return {"message": "User successfully logged out"}, 200
+
 
 class TokenRefresh(Resource):
     @jwt_required(refresh=True) #setting refresh as True accepts only refresh token
