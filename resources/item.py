@@ -25,6 +25,7 @@ class Item(Resource):
         except:
             return {"message": "Error while fetching item details"}, 500
 
+    @jwt_required()
     def post(self,name):
         if ItemModel.find_by_name(name):
             return {"message": "An item with {} name already exists".format(name)}, 400
@@ -37,6 +38,7 @@ class Item(Resource):
             return {"message": "Error while inserting item"}, 500
         return item.json(),201
 
+    @jwt_required()
     def put(self,name):
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)

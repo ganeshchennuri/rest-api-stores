@@ -10,6 +10,7 @@ class Store(Resource):
             return store.json(), 200
         return {"message": "Store Not Found"},404
     
+    @jwt_required()
     def post(self,name):
         if StoreModel.find_by_name(name):
             return {"message": "Store with {} name already exists".format(name)}, 400

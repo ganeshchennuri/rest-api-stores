@@ -3,15 +3,15 @@
 ## The following endpoints are implemented in this project
 
 ---
-> - /register     => POST         - user register
-> - /login        => POST         - authentication and Token Generation
-> - /logout       => POST         - logout user
-> - /refresh      => POST         - obtaining access token using > refresh token
-> - /user/id      => GET,DELETE   - Querying and deleting user
-> - /stores       => GET          - querying all stores
-> - /store/name   => GET,POST,DELETE - querying, creating and > > deleting stores with name
-> - /items        => GET          - querying all item details
-> - /item/name    => GET,POST,PUT,DELETE - CRUD Operations on items
+- /register     => POST         - user register
+- /login        => POST         - authentication and Token Generation
+- /logout       => POST         - logout user
+- /refresh      => POST         - obtaining access token using refresh token
+- /user/id      => GET,DELETE   - Querying and deleting user
+- /stores       => GET          - querying all stores
+- /store/name   => GET,POST,DELETE - querying, creating and deleting stores with name
+- /items        => GET          - querying all item details
+- /item/name    => GET,POST,PUT,DELETE - CRUD Operations on items
 ---
 
 ### /register
@@ -88,6 +88,9 @@ Response
 endpoint : /user/1
 method : DELETE
 
+Headers:
+Authorization: Bearer access_token
+
 Response
 {
     "message": "User deleted Successfully"
@@ -97,6 +100,9 @@ Response
 ```
 endpoint : /stores
 method : GET
+
+Headers:
+Authorization: Bearer access_token
 
 Response
 {
@@ -108,6 +114,9 @@ Response
 endpoint : /store/laptops
 method : POST
 
+Headers:
+Authorization: Bearer access_token
+
 Response
 {
     "id": 1,
@@ -118,6 +127,9 @@ Response
 ```
 endpoint : /store/laptops
 method : GET
+
+Headers:
+Authorization: Bearer access_token
 
 Response
 {
@@ -137,6 +149,9 @@ Response
 endpoint : /store/laptops
 method : DELETE
 
+Headers:
+Authorization: Bearer access_token
+
 Response
 {
     "message": "Store Deleted"
@@ -146,6 +161,9 @@ Response
 ```
 endpoint : /items
 method : GET
+
+Headers:
+Authorization: Bearer access_token
 
 Response
 {
@@ -163,6 +181,10 @@ Response
 ```
 endpoint : /item/macbook
 method : POST
+
+Headers:
+Authorization: Bearer access_token
+
 payload:
     {
         "store_id": 1,
@@ -181,6 +203,9 @@ Response
 endpoint : /item/macbook
 method : GET
 
+Headers:
+Authorization: Bearer access_token
+
 Response
 {
     "id": 1,
@@ -192,6 +217,10 @@ Response
 ```
 endpoint : /item/iphone12
 method : PUT
+
+Headers:
+Authorization: Bearer access_token
+
 payload:
     {
         "price": 899.0,
@@ -209,6 +238,9 @@ Response
 ```
 endpoint : /item/iphone12
 method : DELETE
+
+Headers:
+Authorization: Bearer access_token
 
 Response
 {
