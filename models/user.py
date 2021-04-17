@@ -1,14 +1,15 @@
 from db import db
+from werkzeug.security import generate_password_hash,check_password_hash
 
 class UserModel(db.Model):  #Extending db.Model creates mapping between Database and class objects, we can insert, update delete using objects
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
-    password = db.Column(db.String(200))
+    password = db.Column(db.String(100))
 
     def __init__(self, username, password):
         self.username = username
-        self.password = password
+        self.password = generate_password_hash(password)
     
     def json(self): #json method to return object in json format
         return {

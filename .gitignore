@@ -5,3 +5,4 @@ instance/
 env/
 env.bak/
 /db/*.sqlite3
+data.db
