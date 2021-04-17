@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager
 
 from resources.store import StoreList, Store
 from resources.item import Item, Itemlist
-from resources.user import UserRegister, User, UserLogin
+from resources.user import UserRegister, User, UserLogin, TokenRefresh
 
 app = Flask(__name__)   #Initializing Flask Web App
 
@@ -35,7 +35,8 @@ api.add_resource(UserRegister, "/register")     #endpoint for Registering the us
 api.add_resource(Store,"/store/<string:name>")  #endpoint for addin new stores to the databse
 api.add_resource(StoreList,"/stores")           #Querying all the stores details
 api.add_resource(User, "/user/<int:user_id>")   #Querying user and deleting user
-api.add_resource(UserLogin, "/login")
+api.add_resource(UserLogin, "/login")           #User logi and JWT access token generation
+api.add_resource(TokenRefresh, "/refresh")
 
 if __name__ == "__main__":
     from db import db   #Importing here to avoid circular import conflict Since Models also import the db

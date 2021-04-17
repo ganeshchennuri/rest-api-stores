@@ -1,7 +1,14 @@
 from flask_restful import Resource, reqparse
 from models.user import UserModel
 from werkzeug.security import check_password_hash
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    jwt_required,
+    get_jwt,
+    get_jwt_identity,
+)
+
 
 user_parser = reqparse.RequestParser()
 user_parser.add_argument("username",
@@ -30,7 +37,7 @@ class User(Resource):
     def get(cls,user_id):
         user = UserModel.find_by_userid(user_id)
         if user:
-            return user.json()
+            return user.json(), 200
         return {"message": "User Not Found"},404
 
     @classmethod
@@ -43,7 +50,7 @@ class User(Resource):
         user = UserModel.find_by_userid(user_id)
         if user:
             user.delete_from_db()
-            return {"message": "User deleted Successfully"}
+            return {"message": "User deleted Successfully"}, 200
         return {"message": "User Not Found"},404
 
 class UserLogin(Resource):
@@ -57,5 +64,12 @@ class UserLogin(Resource):
             return {
                 "access_token": access_token,
                 "refresh_token": refresh_token
-                }
+                }, 200
         return {"message": "Invalid user credentials"}, 401
+
+class TokenRefresh(Resource):
+    @jwt_required(refresh=True) #setting refresh as True accepts only refresh token
+    def post(self):
+        current_user = get_jwt_identity()
+        access_token = create_access_token(identity=current_user, fresh=False)
+        return { "access_token": access_token}, 200

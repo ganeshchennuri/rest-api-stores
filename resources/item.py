@@ -20,14 +20,14 @@ class Item(Resource):
         try:
             item = ItemModel.find_by_name(name)
             if item:
-                return item.json()
+                return item.json(), 200
             return {"message": "item not found"},404
         except:
             return {"message": "Error while fetching item details"}, 500
 
     def post(self,name):
         if ItemModel.find_by_name(name):
-            return {"message": "An item with {} name already exists".format(name)}
+            return {"message": "An item with {} name already exists".format(name)}, 400
 
         data = Item.parser.parse_args()
         item = ItemModel(name,**data)
@@ -47,7 +47,7 @@ class Item(Resource):
             item.price = data['price']
             
         item.save_to_db()
-        return item.json()
+        return item.json(), 201
 
     @jwt_required()
     def delete(self,name):
@@ -60,7 +60,7 @@ class Item(Resource):
         if item is None:
             return {"message": "Item not found"},404
         item.delete_from_db()
-        return {"message": "item deleted successfully"}
+        return {"message": "item deleted successfully"}, 200
 
 
 class Itemlist(Resource):

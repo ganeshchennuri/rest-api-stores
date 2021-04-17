@@ -7,12 +7,12 @@ class Store(Resource):
     def get(self,name):
         store = StoreModel.find_by_name(name)
         if store:
-            return store.json()
+            return store.json(), 200
         return {"message": "Store Not Found"},404
     
     def post(self,name):
         if StoreModel.find_by_name(name):
-            return {"message": "Store with {} name already exists".format(name)}
+            return {"message": "Store with {} name already exists".format(name)}, 400
 
         store = StoreModel(name)
         try:
@@ -31,8 +31,8 @@ class Store(Resource):
         store = StoreModel.find_by_name(name)
         if store:
             store.delete_from_db()
-            return {"message": "Store Deleted"}
-        return {"message": "Store doesnot exist"}
+            return {"message": "Store Deleted"}, 200
+        return {"message": "Store doesnot exist"}, 404
 
 
 class StoreList(Resource):
@@ -41,8 +41,9 @@ class StoreList(Resource):
         userid = get_jwt_identity() #function gives currrently logged in user's details
         stores = StoreModel.find_all()
         if userid:
-            return {"stores": [store.json() for store in stores]}   #if user is logged in complete store details are sent else only store names
+            #if user is logged in complete store details are sent else only store names
+            return {"stores": [store.json() for store in stores]}, 200
         return {
             "stores": [store.name for store in stores],
             "message": "Please login to see more details"
-            }
+            }, 200
