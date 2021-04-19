@@ -18,10 +18,6 @@ app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access", "refresh"]
 app.secret_key = 'dejfofioefokeefnkfhjnfefoelnkwkl' #Secret key to encrypt flask app (servcer side encryption)
 api = Api(app)  #converting FaskApp to RESTAPI's
 
-@app.before_first_request   #This method will run before the first request is sent 
-def create_tables():
-    db.create_all()         #All the necessary tables if not present are created
-
 jwt = JWTManager(app)
 #app.config["JWT_SECRET_KEY"] = "qwertyuipxvvxvswkjoubnemxxnekijebxnxjbshllazxb"  #Secret key to jwt tokens
 
