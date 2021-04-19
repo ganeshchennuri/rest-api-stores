@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
@@ -9,7 +10,7 @@ from blacklist import BLACKLIST
 
 app = Flask(__name__)   #Initializing Flask Web App
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'   #configuring sqlite3 with SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','sqlite:///data.db')  # trying to fetch environment varibale "DATABASE_URL", set to sqlite if not found
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False    #SQLAlchemy already have modification tracker,turning off FlaskSQLAlchemy event tracker to save resources
 app.config["PROPAGATE_EXCEPTIONS"] = True               #Custom exception of other modules like JWT are reflected
 app.config["JWT_BLACKLIST_ENABLED"] = True
