@@ -1,4 +1,6 @@
-# FLASK REST API
+# Stores-REST-API
+
+## Postman Documentation [here](https://documenter.getpostman.com/view/15481224/TzJvdGi1)
 
 ## The following endpoints are implemented in this project
 
